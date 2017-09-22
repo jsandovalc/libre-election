@@ -43,6 +43,7 @@ class Voter(models.Model):
     class Meta:
         verbose_name = "Votante"
         verbose_name_plural = "Votantes"
+        unique_together = (('document', 'election'),)
 
     def __str__(self):
         return f"Votante: {self.document}"
