@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Election(models.Model):
@@ -13,7 +14,6 @@ class Election(models.Model):
     class Meta:
         verbose_name = "Elección"
         verbose_name_plural = "Elecciones"
-
 
     def __str__(self):
         return f'Elección: {self.name}'
@@ -47,3 +47,30 @@ class Voter(models.Model):
 
     def __str__(self):
         return f"Votante: {self.document}"
+
+
+class PollingStation(models.Model):
+    """A polling stating for an election."""
+    name = models.CharField(max_length=30)
+
+    election = models.ForeignKey('Election', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Mesa de votación"
+        verbose_name_plural = "Mesas de votación"
+
+    def __str__(self):
+        return f"Mesa: {self.name}"
+
+
+class VotingJury(models.Model):
+    """Allows voting to users on a polling station."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    election = models.ForeignKey('Election', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Jurado de votación"
+        verbose_name_plural = "Jurados de votación"
+
+    def __str__(self):
+        return f"Jurado: {self.user.username}"
