@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Elecciones - Ingrese su cédula{% endblock %}
+
+{% block content %}
+  <center><h1>Ingrese su cédula</h1></center>
+  <form method="post" action="#">
+    {% csrf_token %}
+    <div class="row uniform 50%">
+      <div class="12u$">
+        <input id="input-document" type="text" name="document" value="" placeholder="CÉDULA" />
+      </div>
+      <div class"12u$">
+        <ul class="actions">
+          <li>
+            <input class="special" type="submit" value="Ver listas" />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+{% endblock %}
