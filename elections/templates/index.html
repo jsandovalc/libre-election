@@ -19,4 +19,11 @@
       </div>
     </div>
   </form>
+  {% if message %}
+    <div class="12u$">
+      <hr />
+      <center><h3>{{ message }}</h3></center>
+      <hr />
+    </div>
+  {% endif %}
 {% endblock %}
