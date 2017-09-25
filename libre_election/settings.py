@@ -123,4 +123,6 @@ STATIC_URL = '/static/'
 
 from .local_settings import *
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = '/login'
+ATOMIC_REQUESTS = True
