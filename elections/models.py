@@ -66,7 +66,8 @@ class PollingStation(models.Model):
 class VotingJury(models.Model):
     """Allows voting to users on a polling station."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    election = models.ForeignKey('Election', on_delete=models.CASCADE)
+    polling_station = models.ForeignKey("PollingStation",
+                                        on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Jurado de votación"
