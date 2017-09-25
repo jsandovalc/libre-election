@@ -17,10 +17,9 @@
     <!-- Header -->
     <header id="header">
       <div class="inner">
-	<a href="index.html" class="logo">Elecciones</a>
 	<nav id="nav">
-	  <a href="index.html">Home</a>
-	  <a href="generic.html">Generic</a>
+          {% block custom_menu %}
+          {% endblock %}
 	  <a href="{% url 'logout' %}">Salir</a>
 	</nav>
       </div>
