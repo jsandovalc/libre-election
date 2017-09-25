@@ -122,3 +122,5 @@ STATIC_URL = '/static/'
 
 
 from .local_settings import *
+
+LOGIN_REDIRECT_URL = 'home'
