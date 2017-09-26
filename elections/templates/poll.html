@@ -7,5 +7,28 @@
 {% endblock %}
 
 {% block content %}
-  A votar!!
+  <div class="row uniform 50%">
+    <div class="12u$">
+      <header>
+        <h3>{{ election.name }} - {{ polling_station.name }}</h3>
+        <p>{{ election.description }}</p>
+      </header>
+      <ul class="actions vertical">
+        {% for list_ in lists %}
+          <li>
+            <a class="button alt fit ballot" href="#">
+              <header>
+                <h4>{{ list_.short_description }}</h4>
+                <p>
+                  {% for candidate in list_.description_list %}
+                      {{ candidate }}<br>
+                    {% endfor %}
+                </p>
+              </header>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}
