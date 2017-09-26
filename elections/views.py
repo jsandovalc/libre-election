@@ -1,9 +1,11 @@
 from delorean import Delorean
-from django import template
+from django.http import JsonResponse
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Voter, VotingJury, List
+from . import models
 
 
 class Index(LoginRequiredMixin, View):
@@ -25,6 +27,17 @@ class Index(LoginRequiredMixin, View):
             voter = Voter.objects.get(
                 document=document,
                 election=election)
+
+            try:
+                if voter.vote:
+                    context = dict(
+                        message=f'La cédula {document} ya votó en la '
+                        f'{voter.vote.polling_station.name} el {voter.vote.created}')
+                    return render(request, 'index.html',
+                                  context=context)
+            except models.Vote.DoesNotExist:
+                pass
+
         except Voter.DoesNotExist:
             context = dict(message=f'La cédula {document} no está registrada para esta elección')
             return render(request, 'index.html',
@@ -50,3 +63,38 @@ class Poll(LoginRequiredMixin, View):
             document=document
         )
         return render(request, 'poll.html', context=context)
+
+
+class Vote(LoginRequiredMixin, View):
+    def get(self, request, document):
+        polling_station = self.request.user.votingjury.polling_station
+
+        election = polling_station.election
+        if not (election.start_date < Delorean().datetime < election.end_date):
+            return JsonResponse({
+                'message': f'La votación no se encuentra activa.'},
+                status=400)
+
+        try:
+            voter = Voter.objects.get(
+                document=document,
+                election=polling_station.election)
+        except Voter.DoesNotExist:
+            return JsonResponse({
+                'message': f'La cédula {document} no se encuentra registrada.'},
+                status=400)
+
+        try:
+            vote = models.Vote.objects.create(
+                voter=voter,
+                polling_station=polling_station)
+        except IntegrityError:
+            vote = models.Vote.objects.get(voter=voter)
+            return JsonResponse({
+                'message': (f'Usted ya había votado en la '
+                            f'{vote.polling_station.name} en {vote.created}')},
+                                status=400)
+
+        return JsonResponse({
+            'message': (f'Voto realizado por {document} en la {vote.polling_station.name} '
+                        f'el {vote.created}')})
