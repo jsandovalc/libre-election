@@ -75,3 +75,19 @@ class VotingJury(models.Model):
 
     def __str__(self):
         return f"Jurado: {self.user.username}"
+
+
+class Vote(models.Model):
+    """A vote from a voter. As simple as that."""
+    created = models.DateTimeField(auto_now_add=True)
+
+    polling_station = models.ForeignKey('PollingStation',
+                                        on_delete=models.CASCADE)
+    voter = models.OneToOneField('Voter', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Voto"
+        verbose_name_plural = "Votos"
+
+    def __str__(self):
+        return f"Vote: {self.voter.document} in {self.polling_station.name}"
