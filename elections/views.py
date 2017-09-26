@@ -39,7 +39,7 @@ class Poll(LoginRequiredMixin, View):
         polling_station = VotingJury.objects.get(
             user=self.request.user).polling_station
         election = polling_station.election
-        lists = List.objects.filter(election=election)
+        lists = List.objects.filter(election=election).order_by('?')
         for list_ in lists:
             list_.description_list = list_.description.split()
 
