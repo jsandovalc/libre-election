@@ -46,6 +46,7 @@ class Poll(LoginRequiredMixin, View):
         context = dict(
             election=election,
             lists=lists,
-            polling_station=polling_station
+            polling_station=polling_station,
+            document=document
         )
         return render(request, 'poll.html', context=context)
