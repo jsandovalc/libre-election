@@ -1,9 +1,11 @@
 from delorean import Delorean
 from django.http import JsonResponse
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Voter, VotingJury, List
 from . import models
 
@@ -11,6 +13,9 @@ from . import models
 class Index(LoginRequiredMixin, View):
     """Form to login with document. No password required."""
     def get(self, request):
+        if request.user.is_superuser:
+            return redirect('report')
+
         return render(request, 'index.html')
 
     def post(self, request):
@@ -98,3 +103,29 @@ class Vote(LoginRequiredMixin, View):
         return JsonResponse({
             'message': (f'Voto realizado por {document} en la {vote.polling_station.name} '
                         f'el {vote.created}')})
+
+
+class Report(UserPassesTestMixin, ListView):
+    model = models.Election
+    template_name = 'report.html'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class ElectionDetail(UserPassesTestMixin, DetailView):
+    model = models.Election
+    template_name = 'election.html'
+
+    context_object_name = 'election'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        lists = self.object.list_set.all()
+        context['labels'] = ', '.join(repr(list.short_description) for list in lists)
+
+        context['series'] = ', '.join()
+        return context
