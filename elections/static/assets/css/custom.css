@@ -1,0 +1,30 @@
+.ct-series-a .ct-slice-pie {
+  fill: hsl(120, 40%, 60%);
+  stroke: white;
+  stroke-width: 0px;
+}
+
+.ct-series-b .ct-slice-pie {
+  fill: #1c75bc;
+}
+.ct-series-c .ct-slice-pie {
+  fill: #92278f;
+}
+.ct-series-d .ct-slice-pie {
+  fill: #fbb040;
+}
+.ct-series-e .ct-slice-pie {
+  fill: #f15a29;
+}
+.ct-series-f .ct-slice-pie {
+  fill: #be1e2d;
+}
+.ct-label{
+  fill: black;
+}
+
+.ct-chart {
+  width: 800px;
+  height: 350px;
+  font-family: Lato, Helvetica-Neue, monospace;
+}

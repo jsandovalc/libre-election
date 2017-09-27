@@ -134,12 +134,13 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lists = list(self.object.list_set.all())
-        print(lists)
-        context['labels'] = mark_safe(', '.join(repr(list_.short_description)
-                                      for list_ in lists))
-        print(context['labels'], type(context['labels']))
 
-        context['series'] = mark_safe(', '.join(str(list_.vote_set.all().count())
-                                      for list_ in lists))
-        print(context['series'])
+        votes = [list_.vote_set.all().count() for list_ in lists]
+        percentages = [int(vote/sum(votes)*100) for vote in votes]
+        context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
+
+        context['labels'] = mark_safe(', '.join(
+            repr(f'{list_.short_description} - {percentage}%')
+            for list_,percentage in zip(lists, percentages)))
+
         return context

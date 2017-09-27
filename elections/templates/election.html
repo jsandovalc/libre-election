@@ -1,15 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Elecciones - Reportes{% endblock %}
 
 {% block head_css %}
   <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+
+{% endblock %}
+
+{% block custom_menu %}
+  <a href="{% url 'report' %}">Regresar</a>
 {% endblock %}
 
 {% block content %}
-  El detalle! {{ election }}
-  <div class="ct-chart ct-perfect-fourth"></div>
+  <h1>Resultados de {{ election.name }}</h1>
+  <div class="ct-chart ct-golden-section"></div>
 {% endblock %}
 
 {% block extra_js %}
@@ -22,7 +30,7 @@
    var options = {
        labelInterpolationFnc: function(value) {
            return value[0]
-       }
+       },
    };
 
    var responsiveOptions = [
