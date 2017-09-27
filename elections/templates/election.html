@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Elecciones - Reportes{% endblock %}
+
+{% block head_css %}
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+  <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+{% endblock %}
+
+{% block content %}
+  El detalle! {{ election }}
+  <div class="ct-chart ct-perfect-fourth"></div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+   var data = {
+       labels: [{{ labels }}],
+       series: [20, 15, 40]
+   };
+
+   var options = {
+       labelInterpolationFnc: function(value) {
+           return value[0]
+       }
+   };
+
+   var responsiveOptions = [
+       ['screen and (min-width: 640px)', {
+           chartPadding: 30,
+           labelOffset: 100,
+           labelDirection: 'explode',
+           labelInterpolationFnc: function(value) {
+               return value;
+           }
+       }],
+       ['screen and (min-width: 1024px)', {
+           labelOffset: 80,
+           chartPadding: 20
+       }]
+   ];
+
+   new Chartist.Pie('.ct-chart', data, options, responsiveOptions);
+  </script>
+{% endblock %}

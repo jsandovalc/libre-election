@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Elecciones - Reportes{% endblock %}
+
+{% block content %}
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Fecha de inicio</th>
+          <th>Fecha de finalización</th>
+        </tr>
+        <tbody>
+          {% for election in object_list %}
+            <tr>
+              <td><a href='{% url 'election-detail' pk=election.pk %}'>{{ election.name }}</a></td>
+              <td>{{ election.description }}</td>
+              <td>{{ election.start_date }}</td>
+              <td>{{ election.end_date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </thead>
+    </table>
+  </div>
+{% endblock %}
