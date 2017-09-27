@@ -16,7 +16,6 @@
 
        for (let link of links) {
            link.onclick = function() {
-               console.log(link);
                swal({
                    title: '¿Está seguro {{ document }}?',
                    text: 'Votará por "'  + link.getAttribute('list') +   '" en la mesa: {{ polling_station.name }}',
@@ -30,7 +29,7 @@
 
                    $.ajax({
                        method: "GET",
-                       url: "{% url 'vote' document=document %}",
+                       url: "{% url 'vote' document=document %}?list=" + link.getAttribute('id'),
                        data: {},
                        success: function( data ) {
 
@@ -88,7 +87,7 @@
       <ul class="actions vertical">
         {% for list_ in lists %}
           <li>
-            <a class="button alt fit ballot" list="{{ list_.short_description }}" href="#">
+            <a id="{{ list_.pk }}" class="button alt fit ballot" list="{{ list_.short_description }}" href="#">
               <header>
                 <h4>{{ list_.short_description }}</h4>
                 <p>

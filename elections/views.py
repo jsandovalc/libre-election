@@ -1,5 +1,6 @@
 from delorean import Delorean
 from django.http import JsonResponse
+from django.utils.safestring import mark_safe
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.db import IntegrityError
@@ -90,18 +91,26 @@ class Vote(LoginRequiredMixin, View):
                 status=400)
 
         try:
+            try:
+                list_ = models.List.objects.get(pk=int(request.GET.get('list')))
+            except models.List.DoesNotExist:
+                return JsonResponse({'message': 'La lista no existe',},
+                                    status=400)
+
             vote = models.Vote.objects.create(
                 voter=voter,
+                list_choice=list_,
                 polling_station=polling_station)
         except IntegrityError:
             vote = models.Vote.objects.get(voter=voter)
+
             return JsonResponse({
                 'message': (f'Usted ya había votado en la '
                             f'{vote.polling_station.name} en {vote.created}')},
                                 status=400)
 
         return JsonResponse({
-            'message': (f'Voto realizado por {document} en la {vote.polling_station.name} '
+            'message': (f'Voto realizado por {document} en la {vote.polling_station.name} por {list_.short_description} '
                         f'el {vote.created}')})
 
 
@@ -124,8 +133,13 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        lists = self.object.list_set.all()
-        context['labels'] = ', '.join(repr(list.short_description) for list in lists)
+        lists = list(self.object.list_set.all())
+        print(lists)
+        context['labels'] = mark_safe(', '.join(repr(list_.short_description)
+                                      for list_ in lists))
+        print(context['labels'], type(context['labels']))
 
-        context['series'] = ', '.join()
+        context['series'] = mark_safe(', '.join(str(list_.vote_set.all().count())
+                                      for list_ in lists))
+        print(context['series'])
         return context
