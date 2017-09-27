@@ -81,9 +81,10 @@ class Vote(models.Model):
     """A vote from a voter. As simple as that."""
     created = models.DateTimeField(auto_now_add=True)
 
+    voter = models.OneToOneField('Voter', on_delete=models.CASCADE)
     polling_station = models.ForeignKey('PollingStation',
                                         on_delete=models.CASCADE)
-    voter = models.OneToOneField('Voter', on_delete=models.CASCADE)
+    list_choice = models.ForeignKey('List', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Voto"
