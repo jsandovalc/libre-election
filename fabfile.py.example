@@ -2,6 +2,7 @@ from fabric.api import *
 
 
 INSTALLDIR = ''
+VENVCMD = ''
 
 env.hosts = [
     '',
@@ -18,7 +19,8 @@ def restart_elections():
 
 
 def deploy():
-    with cd(INSTALLDIR):
+    with cd(INSTALLDIR), prefix(VENVCMD):
         run("git pull")
+        run("./manage.py collectstatic")
 
     restart_elections()
