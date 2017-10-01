@@ -84,22 +84,24 @@
         <h3>{{ election.name }} - {{ polling_station.name }} - {{ document }}</h3>
         <p>{{ election.description }}</p>
       </header>
-      <ul class="actions vertical">
-        {% for list_ in lists %}
+    </div>
+    {% for list_ in lists %}
+      <div class="4u">
+        <ul class="actions horizontal fit">
           <li>
             <a id="{{ list_.pk }}" class="button alt fit ballot" list="{{ list_.short_description }}" href="#">
               <header>
                 <h4>{{ list_.short_description }}</h4>
                 <p>
                   {% for candidate in list_.description_list %}
-                      {{ candidate }}<br>
-                    {% endfor %}
+                    {{ candidate }}<br>
+                  {% endfor %}
                 </p>
               </header>
             </a>
           </li>
-        {% endfor %}
-      </ul>
-    </div>
+        </ul>
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}
