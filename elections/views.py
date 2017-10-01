@@ -136,7 +136,11 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
         lists = list(self.object.list_set.all())
 
         votes = [list_.vote_set.all().count() for list_ in lists]
-        percentages = [int(vote/sum(votes)*100) for vote in votes]
+
+        percentages = [int(vote/sum(votes)*100) if sum(votes) > 0 else 0
+                       for vote
+                       in votes]
+
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
 
         context['labels'] = mark_safe(', '.join(
