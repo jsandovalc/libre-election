@@ -91,9 +91,10 @@
           <li>
             <a id="{{ list_.pk }}" class="button alt fit ballot" list="{{ list_.short_description }}" href="#">
               <header>
-                <h4>{{ list_.short_description }}</h4>
+                <h5>{{ list_.short_description }}</h5>
+                <h5>{{ list_.description_list|first }}</h5>
                 <p>
-                  {% for candidate in list_.description_list %}
+                  {% for candidate in list_.description_list|slice:"1:" %}
                     {{ candidate }}<br>
                   {% endfor %}
                 </p>
