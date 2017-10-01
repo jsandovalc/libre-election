@@ -1,0 +1,24 @@
+from fabric.api import *
+
+
+INSTALLDIR = ''
+
+env.hosts = [
+    '',
+]
+
+env.user = ""
+
+# Set the password [NOT RECOMMENDED]
+# env.password = "passwd"
+
+
+def restart_elections():
+    sudo("systemctl restart election")
+
+
+def deploy():
+    with cd(INSTALLDIR):
+        run("git pull")
+
+    restart_elections()
