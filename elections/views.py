@@ -142,7 +142,38 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
                        in votes]
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
+        context['table'] = zip(lists, votes, percentages)
+        context['labels'] = mark_safe(', '.join(
+            repr(f'{list_.short_description} - {percentage}%')
+            for list_,percentage in zip(lists, percentages)))
 
+        return context
+
+
+class PollingStationDetail(UserPassesTestMixin, DetailView):
+    """A voting report per polling station."""
+    model = models.PollingStation
+    template_name = 'station.html'
+
+    context_object_name = 'election'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        lists = list(self.object.election.list_set.all())
+
+        votes = [list_.vote_set.filter(polling_station=self.object).count()
+                 for list_ in lists]
+
+        percentages = [int(vote/sum(votes)*100) if sum(votes) > 0 else 0
+                       for vote
+                       in votes]
+
+        context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
+        context['table'] = zip(lists, votes, percentages)
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
             for list_,percentage in zip(lists, percentages)))

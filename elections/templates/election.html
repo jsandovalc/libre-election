@@ -16,8 +16,38 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Resultados de {{ election.name }}</h1>
+  {% block section_title %}
+    <h1>Resultados de {{ election.name }}</h1>
+  {% endblock section_title %}
   <div class="ct-chart ct-golden-section"></div>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Lista</th>
+          <th># de Votos</th>
+          <th>Porcentaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for list, votes, perc in table %}
+          <tr>
+            <td>{{ list.short_description }}</td>
+            <td>{{ votes }}</td>
+            <td>{{ perc }}%</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% block section_footer %}
+  <h3>Reportes por mesa</h3>
+  <ul>
+    {% for station in election.pollingstation_set.all %}
+      <li><a href='{% url 'station-detail' pk=station.pk %}'>{{ station.name }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endblock section_footer %}
 {% endblock %}
 
 {% block extra_js %}

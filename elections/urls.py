@@ -9,4 +9,7 @@ urlpatterns = [
     url(r'^report/$', views.Report.as_view(), name='report'),
     url(r'^report/election/(?P<pk>\d+)$', views.ElectionDetail.as_view(),
         name='election-detail'),
+    url(r'^report/election/station/(?P<pk>\d+)$',
+        views.PollingStationDetail.as_view(),
+        name='station-detail'),
 ]
