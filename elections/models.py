@@ -23,6 +23,7 @@ class List(models.Model):
     """A list of candidates."""
     short_description = models.CharField(max_length=50)
     description = models.TextField()
+    image = models.FileField(upload_to='img/', null=True, default=None)
 
     election = models.ForeignKey('Election', on_delete=models.CASCADE)
 

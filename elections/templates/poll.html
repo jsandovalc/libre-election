@@ -86,12 +86,19 @@
       </header>
     </div>
     {% for list_ in lists %}
-      <div class="4u">
+      <div class="3u">
         <ul class="actions horizontal fit">
           <li>
             <a id="{{ list_.pk }}" class="button alt fit ballot" list="{{ list_.short_description }}" href="#">
               <header>
                 <h5>{{ list_.short_description }}</h5>
+                {% if list_.image %}
+                  <center>
+                    <div class="image fit">
+                      <img style="max-width: 150px; max-height: 150px" src="{{ list_.image.url }}" alt="" />
+                    </div>
+                  </center>
+                {% endif %}
                 <h5>{{ list_.description_list|first }}</h5>
                 <p>
                   {% for candidate in list_.description_list|slice:"1:" %}

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
 
@@ -27,3 +29,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': '/elections'},
         name='logout'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
