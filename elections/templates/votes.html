@@ -3,6 +3,11 @@
 
 {% block title %}Elecciones - Consultar votos{% endblock %}
 
+{% block custom_menu %}
+  <a href="{% url 'login' %}">Jurados</a>
+{% endblock %}
+
+
 {% block content %}
   <h2>Cédula</h2>
   <form method="post">

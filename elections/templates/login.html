@@ -2,6 +2,10 @@
 
 {% block title %}Elecciones - Ingresar{% endblock %}
 
+{% block custom_menu %}
+  <a href="{% url 'query-votes' %}">Consultar</a>
+{% endblock %}
+
 {% block content %}
   <h2>Ingresar</h2>
   <form method="post">

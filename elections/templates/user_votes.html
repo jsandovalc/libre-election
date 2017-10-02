@@ -3,6 +3,11 @@
 
 {% block title %}Elecciones - Consultar votos{% endblock %}
 
+{% block custom_menu %}
+  <a href="{% url 'query-votes' %}">Regresar</a>
+{% endblock %}
+
+
 {% block content %}
   <h1>Votos para {{ document }}</h1>
   {% for vote in votes %}
