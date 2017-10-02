@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Elecciones - Consultar votos{% endblock %}
+
+{% block content %}
+  <h1>Votos para {{ document }}</h1>
+  {% for vote in votes %}
+    <p>Usted votó por la lista {{ vote.list_choice.short_description }} en la mesa
+      {{ vote.polling_station.name }}en la votación {{ vote.list_choice.election.name }}
+      en la fecha {{ vote.created }}
+    </p>
+    <hr />
+  {% endfor %}
+{% endblock content %}

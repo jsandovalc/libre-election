@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Elecciones - Consultar votos{% endblock %}
+
+{% block content %}
+  <h2>Cédula</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row uniform 50%">
+      <div class="12u$">
+        <input id="document-input" type="text" name="document" placeholder="Cédula" />
+      </div>
+      <div class="12u$">
+        <button type="submit">Consultar</button>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

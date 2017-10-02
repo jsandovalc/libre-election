@@ -179,3 +179,25 @@ class PollingStationDetail(UserPassesTestMixin, DetailView):
             for list_,percentage in zip(lists, percentages)))
 
         return context
+
+
+class QueryVotesView(View):
+    def get(self, request):
+        return render(request, 'votes.html')
+
+    def post(self, request):
+        return redirect('votes-report', document=request.POST.get('document'))
+
+
+class VoteReport(ListView):
+    context_object_name = 'votes'
+    template_name = 'user_votes.html'
+
+    def get_queryset(self):
+        return models.Vote.objects.filter(
+            voter__document=self.kwargs['document'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['document'] = self.kwargs['document']
+        return context
