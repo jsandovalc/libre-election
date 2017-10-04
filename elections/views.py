@@ -153,7 +153,7 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
         context['table'] = sorted(zip(lists, votes, percentages),
-                                  key=itemgetter(1), reverse=True)
+                                  key=itemgetter(0))
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
             for list_, percentage in zip(lists, percentages)))
@@ -185,7 +185,7 @@ class PollingStationDetail(UserPassesTestMixin, DetailView):
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
         context['table'] = sorted(zip(lists, votes, percentages),
-                                  key=itemgetter(1), reverse=True)
+                                  key=itemgetter(0))
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
             for list_, percentage in zip(lists, percentages)))
