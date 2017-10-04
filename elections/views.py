@@ -20,7 +20,7 @@ class Index(LoginRequiredMixin, View):
         return render(request, 'index.html')
 
     def post(self, request):
-        document = request.POST.get('document')
+        document = request.POST.get('document').replace(' ', '').replace('.', '')
 
         try:
             election = VotingJury.objects.get(user=self.request.user).polling_station.election
