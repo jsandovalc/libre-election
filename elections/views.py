@@ -61,7 +61,7 @@ class Poll(LoginRequiredMixin, View):
         election = polling_station.election
         lists = List.objects.filter(election=election).order_by('?')
         for list_ in lists:
-            list_.description_list = list_.description.split()
+            list_.description_list = list_.description.split('\n')
 
         context = dict(
             election=election,
