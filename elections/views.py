@@ -1,3 +1,4 @@
+import pytz
 from delorean import Delorean
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
@@ -9,6 +10,11 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Voter, VotingJury, List
 from . import models
+
+
+def to_localtime(dt):
+    local_tz = pytz.timezone('America/Bogota')
+    return dt.replace(tzinfo=pytz.utc).astimezone(local_tz).replace(tzinfo=None)
 
 
 class Index(LoginRequiredMixin, View):
@@ -37,6 +43,8 @@ class Index(LoginRequiredMixin, View):
 
             try:
                 if voter.vote:
+
+                    voter.vote.created = to_localtime(voter.vote.created)
                     context = dict(
                         message=f'La cédula {document} ya votó en la '
                         f'{voter.vote.polling_station.name} el {voter.vote.created}')
@@ -112,7 +120,7 @@ class Vote(LoginRequiredMixin, View):
 
         return JsonResponse({
             'message': (f'Voto realizado por {document} en la {vote.polling_station.name} por {list_.short_description} '
-                        f'el {vote.created}')})
+                        f'el {to_localtime(vote.created)}')})
 
 
 class Report(UserPassesTestMixin, ListView):
