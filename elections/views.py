@@ -1,5 +1,4 @@
 import pytz
-from operator import itemgetter
 from delorean import Delorean
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
@@ -153,7 +152,7 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
         context['table'] = sorted(zip(lists, votes, percentages),
-                                  key=itemgetter(0))
+                                  key=lambda l: l[0].short_description)
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
             for list_, percentage in zip(lists, percentages)))
@@ -185,7 +184,7 @@ class PollingStationDetail(UserPassesTestMixin, DetailView):
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
         context['table'] = sorted(zip(lists, votes, percentages),
-                                  key=itemgetter(0))
+                                  key=lambda l: l[0].short_description)
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
             for list_, percentage in zip(lists, percentages)))
