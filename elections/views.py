@@ -1,4 +1,5 @@
 import pytz
+from operator import itemgetter
 from delorean import Delorean
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
@@ -103,7 +104,7 @@ class Vote(LoginRequiredMixin, View):
             try:
                 list_ = models.List.objects.get(pk=int(request.GET.get('list')))
             except models.List.DoesNotExist:
-                return JsonResponse({'message': 'La lista no existe',},
+                return JsonResponse({'message': 'La lista no existe', },
                                     status=400)
 
             vote = models.Vote.objects.create(
@@ -151,10 +152,11 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
                        in votes]
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
-        context['table'] = zip(lists, votes, percentages)
+        context['table'] = sorted(zip(lists, votes, percentages),
+                                  key=itemgetter(1), reverse=True)
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
-            for list_,percentage in zip(lists, percentages)))
+            for list_, percentage in zip(lists, percentages)))
 
         return context
 
@@ -182,10 +184,11 @@ class PollingStationDetail(UserPassesTestMixin, DetailView):
                        in votes]
 
         context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
-        context['table'] = zip(lists, votes, percentages)
+        context['table'] = sorted(zip(lists, votes, percentages),
+                                  key=itemgetter(1), reverse=True)
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
-            for list_,percentage in zip(lists, percentages)))
+            for list_, percentage in zip(lists, percentages)))
 
         return context
 
