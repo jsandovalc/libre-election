@@ -99,7 +99,7 @@
                     </div>
                   </center>
                 {% endif %}
-                <h5>{{ list_.description_list|first }}</h5>
+                <h5 class="small-h5">{{ list_.description_list|first }}</h5>
                 <p>
                   {% for candidate in list_.description_list|slice:"1:" %}
                     {{ candidate }}<br>
