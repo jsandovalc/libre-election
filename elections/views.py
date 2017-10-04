@@ -20,7 +20,8 @@ class Index(LoginRequiredMixin, View):
         return render(request, 'index.html')
 
     def post(self, request):
-        document = request.POST.get('document').replace(' ', '').replace('.', '')
+        document = request.POST.get(
+            'document').replace(' ', '').replace('.', '').replace(',', '')
 
         try:
             election = VotingJury.objects.get(user=self.request.user).polling_station.election
@@ -186,7 +187,10 @@ class QueryVotesView(View):
         return render(request, 'votes.html')
 
     def post(self, request):
-        return redirect('votes-report', document=request.POST.get('document'))
+        return redirect(
+            'votes-report',
+            document=request.POST.get('document').replace(
+                '.', '').replace(',', '').replace(' ', ''))
 
 
 class VoteReport(ListView):
