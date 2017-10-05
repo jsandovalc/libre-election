@@ -27,6 +27,7 @@
           <th>Lista</th>
           <th># de Votos</th>
           <th>Porcentaje</th>
+          <th>Mesas</th>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +36,13 @@
             <td>{{ list.short_description }}</td>
             <td>{{ votes }}</td>
             <td>{{ perc }}%</td>
+            <td>
+              <ul>
+                {% for result in list.results %}
+                  <li>{{ result.name }}: {{ result.votes }}</li>
+                {% endfor %}
+              </ul>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
