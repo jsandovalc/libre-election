@@ -1,6 +1,7 @@
+import csv
 import pytz
 from delorean import Delorean
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.safestring import mark_safe
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -227,3 +228,45 @@ class VoteReport(ListView):
         context = super().get_context_data(**kwargs)
         context['document'] = self.kwargs['document']
         return context
+
+
+def download_csv(request, pk):
+    election = models.Election.objects.get(pk=pk)
+
+    lists = list(election.list_set.all())
+
+    votes = [list_.vote_set.all().count() for list_ in lists]
+
+    percentages = [int(vote/sum(votes)*100) if sum(votes) > 0 else 0
+                   for vote
+                   in votes]
+
+    table = sorted(zip(lists, votes, percentages),
+                   key=lambda l: l[0].order)
+
+    for list_ in lists:
+        results = []
+        for station in election.pollingstation_set.all():
+            results.append(
+                dict(
+                    name=station.name,
+                    votes=models.Vote.objects.filter(polling_station=station,
+                                                     list_choice=list_).count()))
+
+        list_.results = sorted(results, key=lambda r: r['name'])
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="election.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(('Lista', '# de Votos', 'Porcentaje', 'Mesas'))
+    for list_, votes, perc in table:
+        writer.writerow((
+            list_.short_description,
+            votes,
+            perc,
+            ','.join([f"{result['name']}: {result['votes']}"
+                      for result in list_.results])
+        ))
+
+    return response

@@ -20,6 +20,10 @@
     <h1>Resultados de {{ election.name }}</h1>
   {% endblock section_title %}
   <div class="ct-chart ct-golden-section"></div>
+  <div>
+    <center><a class="button special icon fa-download" href="{% url 'election-csv' pk=election.pk %}">
+      Descargar resultados</a></center>
+  </div>
   <div class="table-wrapper">
     <table>
       <thead>
