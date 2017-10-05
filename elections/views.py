@@ -146,13 +146,21 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
         lists = list(self.object.list_set.all())
 
         votes = [list_.vote_set.all().count() for list_ in lists]
-
+        table_votes = votes.copy()
         percentages = [int(vote/sum(votes)*100) if sum(votes) > 0 else 0
                        for vote
                        in votes]
 
-        context['series'] = mark_safe(', '.join(str(vote) for vote in votes))
-        context['table'] = sorted(zip(lists, votes, percentages),
+        series = [str(vote) for vote in votes]
+
+        for serie, num_votes in zip(series.copy(), votes.copy()):
+            if not num_votes:
+                series.remove(serie)
+                votes.remove(0)
+
+        context['series'] = mark_safe(', '.join(series))
+
+        context['table'] = sorted(zip(lists, table_votes, percentages),
                                   key=lambda l: l[0].order)
 
         for list_ in lists:
