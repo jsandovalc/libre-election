@@ -151,13 +151,7 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
                        for vote
                        in votes]
 
-        series = [str(vote) for vote in votes]
-
-        for serie, num_votes in zip(series.copy(), votes.copy()):
-            if not num_votes:
-                series.remove(serie)
-                votes.remove(0)
-
+        series = [str(vote) for vote in votes if vote]
         context['series'] = mark_safe(', '.join(series))
 
         context['table'] = sorted(zip(lists, table_votes, percentages),
@@ -176,7 +170,7 @@ class ElectionDetail(UserPassesTestMixin, DetailView):
 
         context['labels'] = mark_safe(', '.join(
             repr(f'{list_.short_description} - {percentage}%')
-            for list_, percentage in zip(lists, percentages)))
+            for list_, percentage in zip(lists, percentages) if percentage))
 
         return context
 
