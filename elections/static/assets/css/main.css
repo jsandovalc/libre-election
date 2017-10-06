@@ -3952,10 +3952,11 @@ body.is-loading #banner:after {
   font-size: 0.9em;
   margin: 0 0 2em 0;
   padding: 0;
+  color: white;
 }
 
 #footer .copyright a {
-  color: #white;
+  color: #f2a3a5;
 }
 
 @media screen and (max-width: 980px) {
