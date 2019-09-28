@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url="elections/", permanent=True)),
     url(r'^elections/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', auth_views.login, {'template_name': 'login.html'},
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'),
         name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/elections'},
+    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/elections'),
         name='logout'),
 ]
 
