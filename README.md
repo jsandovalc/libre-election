@@ -14,3 +14,17 @@ Simple site to perform elections.
 2. Copy local_settings.py.example to local_settings.py.
 3. Create a PostgreSQL database for testing.
 4. Configure database.
+5. Run migrations (insert code snippet).
+6. Create a django superuser.
+
+# Quickstart
+
+1. Go to django admin and create an election.
+2. Create a polling station.
+3. Create a voting jury.
+4. Create a voting user.
+
+## To vote
+
+Go to / and login as a voting jury. Now users can vote with their
+document number.
