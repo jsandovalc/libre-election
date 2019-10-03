@@ -11,7 +11,7 @@
 {% block content %}
   <h1>Votos para {{ document }}</h1>
   {% for vote in votes %}
-    <p>Usted votó por en la mesa
+    <p>Usted votó en la mesa
       {{ vote.polling_station.name }} de la votación {{ vote.list_choice.election.name }}
       en la fecha {{ vote.created }}
     </p>
